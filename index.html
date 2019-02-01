@@ -74,6 +74,7 @@
 				versch=65;
 			}
 			var key="";
+			document.getElementById("erg").value = isCaesar+"\n"+maxRnd+"\n"+versch+"\n"+keyLen;
 			for (var i=0; i<keyLen; i++){
 				key += String.fromCharCode(Math.random()*maxRnd+versch);
 			}
