@@ -7,8 +7,8 @@
 			font-family:sans-serif;
 		}
 		textarea {
-			width: 500px;
-			height: 200px;
+			width: 450px;
+			height: 100px;
 		}
 		#erg {
 			border: 1px solid black;
@@ -62,7 +62,7 @@
 		}
 		
 		function keyGen(keyLen) {
-			if (!keyLen){
+			if (!keyLen || keyLen<=0){
 				var inText=document.getElementById("startText");
 				keyLen=inText.length;
 			}
@@ -85,7 +85,7 @@
 	<h2>Chiffre</h2>
 	Text:<textarea id='startText'></textarea><br>
 	Key :<textarea id='keyText'></textarea><br>
-	<button onclick='keyGen();'>Ranomize</button>
+	<button onclick='keyGen(-1);'>Ranomize</button>
 	<button onclick='chiffre(1);'>Chiffre</button><button onclick='chiffre(-1);'>Dechiffre</button><br><br>
 	<input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label><br><br>
 	Erg.:<div id='erg'></div>
