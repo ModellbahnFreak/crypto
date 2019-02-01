@@ -6,6 +6,13 @@
 		body {
 			font-family:sans-serif;
 		}
+		textarea {
+			width: 500px;
+			height: 200px;
+		}
+		#erg {
+			border: 1px solid black;
+		}
 	</style>
 	<script>
 		function moduloNeg(zahl, mod) {
@@ -53,13 +60,33 @@
 			}
 			document.getElementById("erg").innerText = outText;
 		}
+		
+		function keyGen(keyLen) {
+			if (!keyLen){
+				var inText=document.getElementById("startText");
+				keyLen=inText.length;
+			}
+			var isCaesar = document.getElementById("isCaesar").checked;
+			var maxRnd=256;
+			var versch=0;
+			if (isCaesar){
+				maxRnd=26;
+				versch=65;
+			}
+			var key="";
+			for (var i=0; i<keyLen; i++){
+				key += String.fromCharCode(Math.random()*maxRnd+versch);
+			}
+			document.getElementById("keyText").value=key;
+		}
 	</script>
 </head>
 <body>
 	<h2>Chiffre</h2>
 	Text:<textarea id='startText'></textarea><br>
 	Key :<textarea id='keyText'></textarea><br>
+	<button onclick='keyGen();'>Ranomize</button>
 	<button onclick='chiffre(1);'>Chiffre</button><button onclick='chiffre(-1);'>Dechiffre</button><br><br>
 	<input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label><br><br>
-	Erg.:<span id='erg'></span>
+	Erg.:<div id='erg'></div>
 </body>
