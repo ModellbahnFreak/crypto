@@ -1,5 +1,65 @@
+<!doctype html>
 <html>
+<head>
+	<title>Vignere oder so</title>
+	<style>
+		body {
+			font-family:sans-serif;
+		}
+	</style>
+	<script>
+		function moduloNeg(zahl, mod) {
+			if (zahl >= 0) {
+				return zahl%mod;
+			} else {
+				while (zahl < 0) {
+					zahl += mod;
+				}
+				return zahl;
+			}
+		}
+		
+		function chiffre(multiply) {
+			var inText = document.getElementById("startText").value;
+			var inKey = document.getElementById("keyText").value;
+			var outText = "";
+			var isCaesar = false;
+			if (document.getElementById("isCaesar").checked) {
+				isCaesar = true;
+			}
+			
+			for (var i = 0; i < inText.length; i++) {
+				var asciiAlt = inText.charCodeAt(i);
+				var asciiNeu = asciiAlt;
+				var versch = inKey.charCodeAt(i%(inKey.length));
+				if (isCaesar) {
+					if (versch >= 65 && versch <= 90) {
+						versch = versch-65;
+					} else if (versch >= 97 && versch <= 122) {
+						versch = versch - 97;
+					}
+					if (asciiAlt >= 65 && asciiAlt <= 90) {
+						asciiNeu = moduloNeg(((asciiAlt-65)+(versch*multiply)),26)+65;
+					} else if (asciiAlt >= 97 && asciiAlt <= 122) {
+						asciiNeu = moduloNeg(((asciiAlt-97)+(versch*multiply)),26)+97;
+					} else {
+						asciiNeu = asciiAlt;
+					}
+				} else {
+					asciiNeu = (asciiAlt + (versch*multiply));
+					asciiNeu = moduloNeg(asciiNeu,256);
+				}
+				outText += String.fromCharCode(asciiNeu);
+			}
+			document.getElementById("erg").innerText = outText;
+		}
+	</script>
+</head>
 <body>
-<h1>Hallo Welt </h1>
+	<h2>Chiffre</h2>
+	Text:<textarea id='startText'></textarea><br>
+	Key :<textarea id='keyText'></textarea><br>
+	<button onclick='chiffre(1);'>Chiffre</button><button onclick='chiffre(-1);'>Dechiffre</button><br><br>
+	<input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label><br><br>
+	Erg.:<span id='erg'></span>
 </body>
-</html>
