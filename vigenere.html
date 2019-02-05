@@ -10,8 +10,8 @@
 			width: 450px;
 			height: 100px;
 		}
-		#erg {
-			border: 1px solid black;
+		#copyState {
+			font-size: 8pt;
 		}
 	</style>
 	<script>
@@ -63,7 +63,7 @@
 		
 		function keyGen(keyLen) {
 			if (!keyLen || keyLen<=0){
-				var inText=document.getElementById("startText");
+				var inText=document.getElementById("startText").value;
 				keyLen=inText.length;
 			}
 			var isCaesar = document.getElementById("isCaesar").checked;
@@ -80,14 +80,27 @@
 			}
 			document.getElementById("keyText").value=key;
 		}
+		
+		function copyResult() {
+			var ergElem = document.getElementById("erg");
+			ergElem.focus();
+			ergElem.select();
+			if (document.execCommand('copy')) {			
+				document.getElementById("copyState").innerText = "In Zwischenablage kopiert";
+			} else {
+				document.getElementById("copyState").innerText = "Konnte nicht kopieren";
+			}
+		}
 	</script>
 </head>
 <body>
 	<h2>Chiffre</h2>
 	Text:<textarea id='startText'></textarea><br>
 	Key :<textarea id='keyText'></textarea><br>
-	<button onclick='keyGen(-1);'>Ranomize</button>
+	<button onclick='keyGen(-1);'>Ranomize Key</button><br>
 	<button onclick='chiffre(1);'>Chiffre</button><button onclick='chiffre(-1);'>Dechiffre</button><br><br>
 	<input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label><br><br>
-	Erg.:<div id='erg'></div>
+	Erg.: <button onclick='copyResult()'>Kopieren</button> <span id='copyState'></span><br>
+	<textarea id='erg' readonly></textarea>
 </body>
+</html>
