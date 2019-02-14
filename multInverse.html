@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="styles.css">
+<title>Multiplikative Inverse</title>
+<script>
+	function solve() {
+		var fakt = document.getElementById("faktor");
+		var mod = document.getElementById("modul");
+		var ggt = document.getElementById("ggt");
+		var mI = document.getElementById("multInv");
+		var mat00 = mod.value;
+		var mat01 = 1;
+		var mat02 = 0;
+		var mat10 = fakt.value;
+		var mat11 = 0;
+		var mat12 = 1;
+		//console.log(mat00 + " " + mat01 + " " + mat02 + "\n" + mat10 + " " + mat11 + " " + mat12 + "\n");
+		while (mat00 != mat10) {
+			if (mat00 > mat10) {
+				mat00 = mat00-mat10;
+				mat01 = mat01-mat11;
+				mat02 = mat02-mat12;
+			} else {
+				mat10 = mat10-mat00;
+				mat11 = mat11-mat01;
+				mat12 = mat12-mat02;
+			}
+			//console.log(mat00 + " " + mat01 + " " + mat02 + "\n" + mat10 + " " + mat11 + " " + mat12 + "\n");
+		}
+		if (mat00 > 0 && mat02 > 0 && mat02 < mod.value) {
+			ggt.innerText = mat00;
+			mI.innerText = mat02;
+		} else if (mat10 > 0 && mat12 > 0 && mat12 < mod.value) {
+			ggt.innerText = mat10;
+			mI.innerText = mat12;
+		} else {
+			ggt.innerText = "-";
+			mI.innerText = "-";
+		}
+		//console.log(mat00 + " " + mat10);
+		//m 1 0
+		//f 0 1
+		//
+	}
+</script>
+</head>
+<body>
+<h1>Multiplikative Inverse</h1>
+Allg. Form:<br>
+<p class="formel">(a&middot;b) mod m = ggT</p>
+Gesucht ist <span class="formel">b</span> mit <span class="formel">b &lt; m</span><br><br>
+
+<span class="formel">(<input type="number" id="faktor"> &middot; b) mod <input type="number" id="modul"> = ggT</span><br>
+<button onclick="solve();">L&ouml;sen</button><br>
+<p>Gr&ouml;&szlig;ter gemeinsamer Teiler: <span class="formel" id="ggt"></span><br>
+Multiplikatives Inverses: <span class="formel" id="multInv"></span></p>
+</body>
+</html>
