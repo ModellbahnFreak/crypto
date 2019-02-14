@@ -2,7 +2,7 @@
 <html>
 <head>
 	<link rel="stylesheet" href="styles.css">
-	<title>Vigenere oder so</title>
+	<title>Vigen&egrave;re-Verschl&uuml;sselung</title>
 	<script>
 		function moduloNeg(zahl, mod) {
 			if (zahl >= 0) {
@@ -83,13 +83,17 @@
 	</script>
 </head>
 <body>
-	<h2>Chiffre</h2>
-	Text:<textarea id='startText'></textarea><br>
-	Key :<textarea id='keyText'></textarea><br>
-	<button onclick='keyGen(-1);'>Ranomize Key</button><br>
-	<button onclick='chiffre(1);'>Chiffre</button><button onclick='chiffre(-1);'>Dechiffre</button><br><br>
-	<input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label><br><br>
-	Erg.: <button onclick='copyResult()'>Kopieren</button> <span id='copyState'></span><br>
-	<textarea id='erg' readonly></textarea>
+	<h2>Vigen&egrave;re-Verschl&uuml;sselung</h2>
+	<table><tbody>
+	<tr><td>Text:</td><td><textarea id='startText'></textarea></td></tr>
+	<tr><td>Key:</td><td><textarea id='keyText'></textarea></td></tr>
+	<tr><td></td><td><button onclick='keyGen(-1);'>Ranomize Key</button></td></tr>
+	<tr><td></td><td><button onclick='chiffre(1);'>Chiffre</button><button onclick='chiffre(-1);'>Dechiffre</button></td></tr>
+	<tr><td></td><td><input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label></td></tr>
+	<tr><td>Erg.:</td><td><button onclick='copyResult()'>Kopieren</button> <span id='copyState'></span></td></tr>
+	<tr><td></td><td><textarea id='erg' readonly></textarea></td></tr>
+	</tbody></table>
+	
+	<br><br><a href="./">Zur&uuml;ck</a>
 </body>
 </html>
