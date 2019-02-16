@@ -15,19 +15,22 @@
 			}
 		}
 		
-		function chiffre(multiply) {
+		function chiffreDom(multiply) {
 			var inText = document.getElementById("startText").value;
 			var inKey = document.getElementById("keyText").value;
-			var outText = "";
 			var isCaesar = false;
 			if (document.getElementById("isCaesar").checked) {
 				isCaesar = true;
 			}
-			
-			for (var i = 0; i < inText.length; i++) {
-				var asciiAlt = inText.charCodeAt(i);
+			document.getElementById("erg").value = chiffre(multiply, inKey, inText, isCaesar);
+		}
+		
+		function chiffre(multiply, key, text, isCaesar) {
+			var outText = "";
+			for (var i = 0; i < text.length; i++) {
+				var asciiAlt = text.charCodeAt(i);
 				var asciiNeu = asciiAlt;
-				var versch = inKey.charCodeAt(i%(inKey.length));
+				var versch = key.charCodeAt(i%(key.length));
 				if (isCaesar) {
 					if (versch >= 65 && versch <= 90) {
 						versch = versch-65;
@@ -47,7 +50,7 @@
 				}
 				outText += String.fromCharCode(asciiNeu);
 			}
-			document.getElementById("erg").value = outText;
+			return outText;
 		}
 		
 		function keyGen(keyLen) {
@@ -80,6 +83,30 @@
 				document.getElementById("copyState").innerText = "Konnte nicht kopieren";
 			}
 		}
+		
+		function guessKey() {
+			var inText = document.getElementById("startText").value;
+			var isCaesar = false;
+			if (document.getElementById("isCaesar").checked) {
+				isCaesar = true;
+			}
+			var keyLen = 0;
+			var maxTreffer = 0;
+			var textLen = inText.length;
+			for (var versch = 1; versch < textLen; versch++) {
+				var treffer = 0;
+				for (var i = 0; i < textLen; i++) {
+					if (inText[i] == inText[(i+versch)%textLen]) {
+						treffer++;
+					}
+				}
+				if (treffer > maxTreffer) {
+					maxTreffer = treffer;
+					keyLen = versch;
+				}
+			}
+			console.log("Key Len: " + keyLen + " (" + maxTreffer + ")");
+		}
 	</script>
 </head>
 <body>
@@ -88,7 +115,7 @@
 	<tr><td>Text:</td><td><textarea id='startText'></textarea></td></tr>
 	<tr><td>Key:</td><td><textarea id='keyText'></textarea></td></tr>
 	<tr><td></td><td><button onclick='keyGen(-1);'>Ranomize Key</button></td></tr>
-	<tr><td></td><td><button onclick='chiffre(1);'>Chiffre</button><button onclick='chiffre(-1);'>Dechiffre</button></td></tr>
+	<tr><td></td><td><button onclick='chiffreDom(1);'>Chiffre</button><button onclick='chiffreDom(-1);'>Dechiffre</button></td></tr>
 	<tr><td></td><td><input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label></td></tr>
 	<tr><td>Erg.:</td><td><button onclick='copyResult()'>Kopieren</button> <span id='copyState'></span></td></tr>
 	<tr><td></td><td><textarea id='erg' readonly></textarea></td></tr>

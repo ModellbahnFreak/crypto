@@ -15,21 +15,25 @@
 			}
 		}
 		
-		function chiffre(multiply) {
+		function chiffreDom(multiply) {
 			var inText = document.getElementById("startText").value;
 			var inKey = parseInt(document.getElementById("keyText").value);
-			var outText = "";
 			var isCaesar = false;
 			if (document.getElementById("isCaesar").checked) {
 				isCaesar = true;
 			}
+			document.getElementById("erg").value = chiffre(inKey*multiply, inText, isCaesar);
+		}
+		
+		function chiffre(key, inText, isCaesar) {
+			var versch = key;
+			var outText = "";
 			if (isCaesar) {
 				versch = (versch%26)+65;
 			}
 			for (var i = 0; i < inText.length; i++) {
 				var asciiAlt = inText.charCodeAt(i);
 				var asciiNeu = asciiAlt;
-				var versch = inKey;
 				if (isCaesar) {
 					if (versch >= 65 && versch <= 90) {
 						versch = versch-65;
@@ -44,12 +48,12 @@
 						asciiNeu = asciiAlt;
 					}
 				} else {
-					asciiNeu = (asciiAlt + (versch*multiply));
+					asciiNeu = (asciiAlt + versch);
 					asciiNeu = moduloNeg(asciiNeu,256);
 				}
 				outText += String.fromCharCode(asciiNeu);
 			}
-			document.getElementById("erg").value = outText;
+			return outText;
 		}
 		
 		function keyGen() {
@@ -73,6 +77,65 @@
 				document.getElementById("copyState").innerText = "Konnte nicht kopieren";
 			}
 		}
+		
+		var words = ["die", "der", "und", "in", "zu", "den", "das", "nicht", "von", "sie", "ist", "des", "sich", "mit", "dem", "dass", "er", "es", "ein", "ich", "auf", "so", "eine", "auch", "als", "an", "nach", "wie", "im", "für"];
+		function rate(text) {
+			var textSmall = text.toLowerCase();
+			var score = 0;
+			for (var i = 0; i < textSmall.length; i++) {
+				var ascii = textSmall.charCodeAt(i);
+				if ((ascii >= 65 && ascii <= 90) || (ascii >= 97 && ascii <= 122) || ascii == 32) {
+					score++;
+				}
+			}
+			for (var i = 0; i < words.length; i++) {
+				if (textSmall.indexOf(words[i]) >= 0) {
+					score += words[i].length*Math.round(textSmall.length/5);
+				}
+			}
+			return score;
+		}
+		
+		var usedKeys = [];
+		function guessKey(clearList) {
+			if (clearList) {
+				usedKeys = [];
+			}
+			var max = 256;
+			var min = 0;
+			var inText = document.getElementById("startText").value;
+			var isCaesar = false;
+			if (document.getElementById("isCaesar").checked) {
+				isCaesar = true;
+				max = 65+26;
+				min = 65;
+			}
+			var maxRating = 0;
+			var maxText = "";
+			var maxIndex = 0;
+			for (var i = min; i < max; i++) {
+				if (!usedKeys.includes(i)) {
+					var text = chiffre(-i, inText, isCaesar);
+					var rating = rate(text);
+					if (rating > maxRating) {
+						maxRating = rating;
+						maxText = text;
+						maxIndex = i;
+					}
+				}
+			}
+			if (isCaesar) {
+				document.getElementById("keyText").value = maxIndex;
+			} else {
+				document.getElementById("keyText").value = maxIndex-min;
+			}
+			document.getElementById("erg").value = maxText;
+			document.getElementById("guessScore").innerText = "Bewertung: " + maxRating;
+			var exclude = parseInt(document.getElementById("keyText").value);
+			if (isFinite(exclude)) {
+				usedKeys.push(exclude);
+			}
+		}
 	</script>
 </head>
 <body>
@@ -81,9 +144,10 @@
 	<tr><td>Text:</td><td><textarea id='startText'></textarea></td></tr>
 	<tr><td>Rotation:</td><td><input type='number' id='keyText'></td></tr>
 	<tr><td></td><td><button onclick='keyGen();'>Ranomize Rot.</button></td></tr>
-	<tr><td></td><td><button onclick='chiffre(1);'>Chiffre</button><button onclick='chiffre(-1);'>Dechiffre</button></td></tr>
+	<tr><td></td><td><button onclick='chiffreDom(1);'>Chiffre</button><button onclick='chiffreDom(-1);'>Dechiffre</button></td></tr>
+	<tr><td></td><td><button onclick='guessKey(true);'>Schl&uuml;ssel raten</button><button onclick='guessKey(false);'>N&auml;chster</button>&nbsp;<span id="guessScore"></span></td></tr>
 	<tr><td></td><td><input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label></td></tr>
-	<tr><td>Erg.:</td><td><button onclick='copyResult()'>Kopieren</button> <span id='copyState'></span></td></tr>
+	<tr><td>Erg.:</td><td><button onclick='copyResult()'>Kopieren</button>&nbsp;<span id='copyState'></span></td></tr>
 	<tr><td></td><td><textarea id='erg' readonly></textarea></td></tr>
 	</tbody></table>
 	
