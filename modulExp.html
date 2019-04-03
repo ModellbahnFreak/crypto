@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="styles.css">
+<title>Modularer Exponent</title>
+<script>
+	function isGerade(num) {
+		if ((num & 0b1) == 0b1) {
+			return false;
+		}
+		return true;
+	}
+	
+	function solve() {
+		var basis = document.getElementById("basis").value;
+		var exp = document.getElementById("exponent").value;
+		var mod = document.getElementById("modul").value;
+		var pot = 1;
+		console.log(pot + "\t" + basis + "\t" + exp);
+		while (exp > 0) {
+			if (isGerade(exp)) {
+				exp = exp >> 1;
+				basis = (basis*basis)%mod;
+			} else {
+				exp--;
+				pot = (pot * basis)%mod;
+			}
+			console.log(pot + "\t" + basis + "\t" + exp);
+		}
+		document.getElementById("erg").innerText = pot;
+	}
+</script>
+</head>
+<body>
+<h1>Modularer Exponent</h1>
+Allg. Form:<br>
+<p class="formel">(t^k) mod m = c</p>
+<span class="formel">(<input type="number" id="basis"> ^ <input type="number" id="exponent">) mod <input type="number" id="modul"> = c</span><br>
+<button onclick="solve();">L&ouml;sen</button><br>
+<p>c = <span class="formel" id="erg"></span><br></p>
+
+<br><br><a href="./">Zur&uuml;ck</a>
+</body>
+</html>

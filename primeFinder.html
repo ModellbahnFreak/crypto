@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<title>Primzhlen</title>
+<script>
+var primeNumbers = [];
+function findPrimes(min, max) {
+	var feld = document.getElementById("primes");
+	var start = min;
+	if (start&1 != 1) {
+		start -= 1;
+	}
+	for (var i = start; i <= max; i++) {
+		var isPrime = true;
+		if (primeNumbers[i] == undefined) {
+			for (var n = 2; n <= i/2 && isPrime; n++) {
+				if (i%n == 0) {
+					isPrime = false;
+				}
+			}
+			primeNumbers[i] = isPrime;
+		} else {
+			isPrime = primeNumbers[i];
+		}
+		if (isPrime) {
+			feld.textContent += i + ", ";
+		}
+	}
+}
+function findPrimesDom() {
+	document.getElementById("primes").innerText = "";
+	var min = parseInt(document.getElementById("min").value);
+	var max = parseInt(document.getElementById("max").value);
+	findPrimes(min, max);
+}
+</script>
+</head>
+<body>
+<input type="number" id="min"><input type="number" id="max"><button type="button" onclick="findPrimesDom();">Go</button>
+<br>
+<span id="primes">
+</span>
+</body>
+</html>

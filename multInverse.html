@@ -9,14 +9,14 @@
 		var mod = document.getElementById("modul");
 		var ggt = document.getElementById("ggt");
 		var mI = document.getElementById("multInv");
-		var mat00 = mod.value;
+		var mat00 = parseInt(mod.value);
 		var mat01 = 1;
 		var mat02 = 0;
-		var mat10 = fakt.value;
+		var mat10 = parseInt(fakt.value);
 		var mat11 = 0;
 		var mat12 = 1;
-		//console.log(mat00 + " " + mat01 + " " + mat02 + "\n" + mat10 + " " + mat11 + " " + mat12 + "\n");
-		while (mat00 != mat10) {
+		console.log(mat00 + " " + mat01 + " " + mat02 + "\n" + mat10 + " " + mat11 + " " + mat12 + "\n");
+		while (mat00 != mat10 && mat00 > 0 && mat10 > 0) {
 			if (mat00 > mat10) {
 				mat00 = mat00-mat10;
 				mat01 = mat01-mat11;
@@ -26,7 +26,7 @@
 				mat11 = mat11-mat01;
 				mat12 = mat12-mat02;
 			}
-			//console.log(mat00 + " " + mat01 + " " + mat02 + "\n" + mat10 + " " + mat11 + " " + mat12 + "\n");
+			console.log(mat00 + " " + mat01 + " " + mat02 + "\n" + mat10 + " " + mat11 + " " + mat12 + "\n");
 		}
 		if (mat00 > 0 && mat02 > 0 && mat02 < mod.value) {
 			ggt.innerText = mat00;
