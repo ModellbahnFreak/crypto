@@ -1,12 +1,13 @@
 <!doctype html>
 <html>
+
 <head>
 	<link rel="stylesheet" href="styles.css">
 	<title>C&auml;sar-Verschl&uuml;sselung</title>
 	<script>
 		function moduloNeg(zahl, mod) {
 			if (zahl >= 0) {
-				return zahl%mod;
+				return zahl % mod;
 			} else {
 				while (zahl < 0) {
 					zahl += mod;
@@ -14,7 +15,7 @@
 				return zahl;
 			}
 		}
-		
+
 		function chiffreDom(multiply) {
 			var inText = document.getElementById("startText").value;
 			var inKey = parseInt(document.getElementById("keyText").value);
@@ -22,62 +23,62 @@
 			if (document.getElementById("isCaesar").checked) {
 				isCaesar = true;
 			}
-			document.getElementById("erg").value = chiffre(inKey*multiply, inText, isCaesar);
+			document.getElementById("erg").value = chiffre(inKey * multiply, inText, isCaesar);
 		}
-		
+
 		function chiffre(key, inText, isCaesar) {
 			var versch = key;
 			var outText = "";
-			if (isCaesar) {
-				versch = (versch%26)+65;
-			}
+			/*if (isCaesar) {
+				versch = (versch % 26) + 65;
+			}*/
 			for (var i = 0; i < inText.length; i++) {
 				var asciiAlt = inText.charCodeAt(i);
 				var asciiNeu = asciiAlt;
 				if (isCaesar) {
-					if (versch >= 65 && versch <= 90) {
-						versch = versch-65;
+					/*if (versch >= 65 && versch <= 90) {
+						versch = versch - 65;
 					} else if (versch >= 97 && versch <= 122) {
 						versch = versch - 97;
-					}
+					}*/
 					if (asciiAlt >= 65 && asciiAlt <= 90) {
-						asciiNeu = moduloNeg(((asciiAlt-65)+(versch*multiply)),26)+65;
+						asciiNeu = moduloNeg(((asciiAlt - 65) + (versch)), 26) + 65;
 					} else if (asciiAlt >= 97 && asciiAlt <= 122) {
-						asciiNeu = moduloNeg(((asciiAlt-97)+(versch*multiply)),26)+97;
+						asciiNeu = moduloNeg(((asciiAlt - 97) + (versch)), 26) + 97;
 					} else {
 						asciiNeu = asciiAlt;
 					}
 				} else {
 					asciiNeu = (asciiAlt + versch);
-					asciiNeu = moduloNeg(asciiNeu,256);
+					asciiNeu = moduloNeg(asciiNeu, 256);
 				}
 				outText += String.fromCharCode(asciiNeu);
 			}
 			return outText;
 		}
-		
+
 		function keyGen() {
 			var isCaesar = document.getElementById("isCaesar").checked;
-			var maxRnd=256;
-			var versch=0;
-			if (isCaesar){
-				maxRnd=26;
-				versch=0;
+			var maxRnd = 256;
+			var versch = 0;
+			if (isCaesar) {
+				maxRnd = 26;
+				versch = 0;
 			}
-			document.getElementById("keyText").value=Math.round(Math.random()*maxRnd+versch);
+			document.getElementById("keyText").value = Math.round(Math.random() * maxRnd + versch);
 		}
-		
+
 		function copyResult() {
 			var ergElem = document.getElementById("erg");
 			ergElem.focus();
 			ergElem.select();
-			if (document.execCommand('copy')) {			
+			if (document.execCommand('copy')) {
 				document.getElementById("copyState").innerText = "In Zwischenablage kopiert";
 			} else {
 				document.getElementById("copyState").innerText = "Konnte nicht kopieren";
 			}
 		}
-		
+
 		var words = ["die", "der", "und", "in", "zu", "den", "das", "nicht", "von", "sie", "ist", "des", "sich", "mit", "dem", "dass", "er", "es", "ein", "ich", "auf", "so", "eine", "auch", "als", "an", "nach", "wie", "im", "für"];
 		function rate(text) {
 			var textSmall = text.toLowerCase();
@@ -90,12 +91,12 @@
 			}
 			for (var i = 0; i < words.length; i++) {
 				if (textSmall.indexOf(words[i]) >= 0) {
-					score += words[i].length*Math.round(textSmall.length/5);
+					score += words[i].length * Math.round(textSmall.length / 5);
 				}
 			}
 			return score;
 		}
-		
+
 		var usedKeys = [];
 		function guessKey(clearList) {
 			if (clearList) {
@@ -107,8 +108,10 @@
 			var isCaesar = false;
 			if (document.getElementById("isCaesar").checked) {
 				isCaesar = true;
-				max = 65+26;
-				min = 65;
+				/*max = 65 + 26;
+				min = 65;*/
+				max = 26;
+				min = 0;
 			}
 			var maxRating = 0;
 			var maxText = "";
@@ -127,7 +130,7 @@
 			if (isCaesar) {
 				document.getElementById("keyText").value = maxIndex;
 			} else {
-				document.getElementById("keyText").value = maxIndex-min;
+				document.getElementById("keyText").value = maxIndex - min;
 			}
 			document.getElementById("erg").value = maxText;
 			document.getElementById("guessScore").innerText = "Bewertung: " + maxRating;
@@ -138,19 +141,49 @@
 		}
 	</script>
 </head>
+
 <body>
 	<h2>C&auml;sar-Verschl&uuml;sselung</h2>
-	<table><tbody>
-	<tr><td>Text:</td><td><textarea id='startText'></textarea></td></tr>
-	<tr><td>Rotation:</td><td><input type='number' id='keyText'></td></tr>
-	<tr><td></td><td><button onclick='keyGen();'>Ranomize Rot.</button></td></tr>
-	<tr><td></td><td><button onclick='chiffreDom(1);'>Chiffre</button><button onclick='chiffreDom(-1);'>Dechiffre</button></td></tr>
-	<tr><td></td><td><button onclick='guessKey(true);'>Schl&uuml;ssel raten</button><button onclick='guessKey(false);'>N&auml;chster</button>&nbsp;<span id="guessScore"></span></td></tr>
-	<tr><td></td><td><input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label></td></tr>
-	<tr><td>Erg.:</td><td><button onclick='copyResult()'>Kopieren</button>&nbsp;<span id='copyState'></span></td></tr>
-	<tr><td></td><td><textarea id='erg' readonly></textarea></td></tr>
-	</tbody></table>
-	
+	<table>
+		<tbody>
+			<tr>
+				<td>Text:</td>
+				<td><textarea id='startText'></textarea></td>
+			</tr>
+			<tr>
+				<td>Rotation:</td>
+				<td><input type='number' id='keyText'></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><button onclick='keyGen();'>Ranomize Rot.</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><button onclick='chiffreDom(1);'>Chiffre</button><button
+						onclick='chiffreDom(-1);'>Dechiffre</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><button onclick='guessKey(true);'>Schl&uuml;ssel raten</button><button
+						onclick='guessKey(false);'>N&auml;chster</button>&nbsp;<span id="guessScore"></span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type='checkbox' id='isCaesar'><label for='isCaesar'>C&auml;sar-Prinzip (26)</label></td>
+			</tr>
+			<tr>
+				<td>Erg.:</td>
+				<td><button onclick='copyResult()'>Kopieren</button>&nbsp;<span id='copyState'></span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><textarea id='erg' readonly></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+
 	<br><br><a href="./">Zur&uuml;ck</a>
 </body>
+
 </html>
